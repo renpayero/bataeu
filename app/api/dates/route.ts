@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     // Normalize to noon UTC to avoid timezone shifting
     const dateObj = new Date(date)
     const normalizedDate = new Date(
-      Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 12, 0, 0, 0)
+      Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), 12, 0, 0, 0)
     )
 
     const specialDate = await prisma.specialDate.create({
