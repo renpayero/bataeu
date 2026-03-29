@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CycleEntry {
+  id           Int      @id @default(autoincrement())
+  startDate    DateTime
+  cycleLength  Int      @default(28)
+  periodLength Int      @default(5)
+  createdAt    DateTime @default(now())
+}
+
+model Antojo {
+  id        Int      @id @default(autoincrement())
+  content   String
+  emoji     String   @default("🍕")
+  createdAt DateTime @default(now())
+}
+
+model SpecialDate {
+  id        Int      @id @default(autoincrement())
+  title     String
+  date      DateTime
+  emoji     String   @default("💕")
+  createdAt DateTime @default(now())
+}

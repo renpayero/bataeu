@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-nunito: 'Nunito', sans-serif;
+  --font-playfair: 'Playfair Display', serif;
+
+  /* === COLORES POR FASE === */
+  /* Fase 1 — Menstruación */
+  --phase-1-primary: #be123c;
+  --phase-1-light: #fda4af;
+  --phase-1-bg: #fff1f2;
+  --phase-1-border: #fecdd3;
+  --phase-1-text: #9f1239;
+
+  /* Fase 2 — Folicular */
+  --phase-2-primary: #16a34a;
+  --phase-2-light: #86efac;
+  --phase-2-bg: #f0fdf4;
+  --phase-2-border: #bbf7d0;
+  --phase-2-text: #166534;
+
+  /* Fase 3 — Ovulación */
+  --phase-3-primary: #db2777;
+  --phase-3-light: #f9a8d4;
+  --phase-3-bg: #fdf2f8;
+  --phase-3-border: #fbcfe8;
+  --phase-3-text: #9d174d;
+
+  /* Fase 4 — Lútea */
+  --phase-4-primary: #7c3aed;
+  --phase-4-light: #c4b5fd;
+  --phase-4-bg: #f5f3ff;
+  --phase-4-border: #ddd6fe;
+  --phase-4-text: #5b21b6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-nunito), sans-serif;
+}
+
+/* ── Scrollbar cute ──────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #fef2f2; }
+::-webkit-scrollbar-thumb { background: #fca5a5; border-radius: 3px; }
+
+/* ── Glassmorphism utility ───────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Shimmer button effect ───────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.2s linear infinite;
+}
+
+/* ── Today glow pulse ────────────────────────────────── */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.6); }
+  50%       { box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.3), 0 0 14px rgba(244, 63, 94, 0.25); }
+}
+
+.today-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ── Confetti particle ───────────────────────────────── */
+@keyframes confetti-fall {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(-120px) rotate(540deg); }
+}
+
+/* ── Food emoji background ───────────────────────────── */
+.food-bg {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 80px,
+    rgba(0,0,0,0) 80px,
+    rgba(0,0,0,0) 160px
+  );
+}
+
+/* ── Playfair font utility ───────────────────────────── */
+.font-playfair {
+  font-family: var(--font-playfair), serif;
+}
