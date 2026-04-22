@@ -51,7 +51,7 @@ function ConfettiParticle({ emoji, vx, vy }: { emoji: string; vx: number; vy: nu
 export default function AntojoForm({
   antojoId,
   initialContent = '',
-  initialEmoji = '🍕',
+  initialEmoji = '🍫',
   onSuccess,
   onCancel,
   submitLabel,
@@ -93,7 +93,7 @@ export default function AntojoForm({
         onSuccess(antojo)
         if (!isEdit) {
           setContent('')
-          setEmoji('🍕')
+          setEmoji('🍫')
           launchConfetti()
         }
       } else {

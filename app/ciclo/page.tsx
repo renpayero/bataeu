@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Mascot from '@/components/Mascot'
+import { BataCycle } from '@/components/BataEu'
 import PhaseCard from '@/components/PhaseCard'
 import Calendar from '@/components/Calendar'
 import DayModal from '@/components/DayModal'
@@ -142,12 +142,16 @@ export default function CicloPage() {
               <div className="w-full lg:w-72 flex flex-col items-center">
                 {currentPhase ? (
                   <>
-                    <Mascot phase={currentPhase.phase} />
+                    <div className="w-56 md:w-64">
+                      <BataCycle phase={currentPhase.phase} />
+                    </div>
                     <PhaseCard phase={currentPhase.phase} dayOfCycle={currentPhase.dayOfCycle} />
                   </>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <Mascot phase={1} />
+                    <div className="w-56 md:w-64">
+                      <BataCycle phase={1} />
+                    </div>
                     <div className="mt-4 text-center px-4">
                       <p className="text-sm text-gray-500 font-medium">
                         Todavía no hay datos del ciclo 🫀

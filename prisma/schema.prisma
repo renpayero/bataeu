@@ -18,14 +18,107 @@ model CycleEntry {
 model Antojo {
   id        Int      @id @default(autoincrement())
   content   String
-  emoji     String   @default("🍕")
+  emoji     String   @default("🍫")
   createdAt DateTime @default(now())
 }
 
 model SpecialDate {
-  id        Int      @id @default(autoincrement())
+  id        Int            @id @default(autoincrement())
   title     String
   date      DateTime
-  emoji     String   @default("💕")
+  emoji     String         @default("💕")
+  createdAt DateTime       @default(now())
+  photos    GalleryPhoto[]
+}
+
+model GalleryPhoto {
+  id            Int          @id @default(autoincrement())
+  filename      String
+  url           String
+  type          String       @default("photo")
+  caption       String?
+  takenAt       DateTime?
+  specialDateId Int?
+  specialDate   SpecialDate? @relation(fields: [specialDateId], references: [id], onDelete: SetNull)
+  createdAt     DateTime     @default(now())
+
+  @@index([takenAt])
+  @@index([createdAt])
+}
+
+model AppSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Módulo Lectura ──────────────────────────────────────
+
+model Series {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  totalBooks Int?
+  books      Book[]
+  createdAt  DateTime @default(now())
+}
+
+model Book {
+  id             Int       @id @default(autoincrement())
+  title          String
+  author         String
+  coverUrl       String?
+  isbn           String?
+  pages          Int?
+  year           Int?
+  genre          String?
+  format         String    @default("fisico")
+  status         String    @default("quiero")
+  priority       Int       @default(3)
+  currentPage    Int?
+  location       String?
+  seriesId       Int?
+  seriesOrder    Int?
+  series         Series?   @relation(fields: [seriesId], references: [id])
+  startDate      DateTime?
+  endDate        DateTime?
+  rating         Int?
+  lentTo         String?
+  lentAt         DateTime?
+  moods          String[]  @default([])
+  abandonReason  String?
+  abandonNote    String?
+  googleBooksId  String?
+  quotes         Quote[]
+  sessions       ReadingSession[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Quote {
+  id        Int      @id @default(autoincrement())
+  bookId    Int
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  text      String
+  page      Int?
+  tags      String[] @default([])
   createdAt DateTime @default(now())
+}
+
+model ReadingSession {
+  id           Int       @id @default(autoincrement())
+  bookId       Int?
+  book         Book?     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  startedAt    DateTime
+  endedAt      DateTime
+  durationMins Int
+  pagesRead    Int?
+  startPage    Int?
+  endPage      Int?
+  pomodoroType String    @default("25-5")
+  customMins   Int?
+  note         String?
+  createdAt    DateTime  @default(now())
+
+  @@index([startedAt])
+  @@index([bookId, startedAt])
 }

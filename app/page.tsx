@@ -6,6 +6,7 @@ import NosotrosBackground from '@/components/NosotrosBackground'
 import RelationshipCounter from '@/components/RelationshipCounter'
 import MilestoneTimeline from '@/components/MilestoneTimeline'
 import SpecialDateForm, { type SpecialDateData } from '@/components/SpecialDateForm'
+import CinematicCounter from '@/components/CinematicCounter'
 import { COUPLE_START_DATE } from '@/lib/coupleConfig'
 
 export default function NosotrosPage() {
@@ -13,6 +14,7 @@ export default function NosotrosPage() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingDate, setEditingDate] = useState<SpecialDateData | null>(null)
+  const [showCinematic, setShowCinematic] = useState(false)
 
   const fetchDates = useCallback(async () => {
     try {
@@ -64,12 +66,29 @@ export default function NosotrosPage() {
     <>
       <NosotrosBackground />
 
+      {showCinematic && (
+        <CinematicCounter onClose={() => setShowCinematic(false)} />
+      )}
+
       <div className="min-h-screen">
         <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
           {/* Counter */}
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <RelationshipCounter />
           </motion.div>
+
+          {/* Cinematic trigger */}
+          <motion.button
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            onClick={() => setShowCinematic(true)}
+            className="w-full bg-gradient-to-r from-rose-500 to-amber-400 text-white font-bold py-3 min-h-[48px] rounded-2xl text-sm shadow-lg shadow-rose-500/20 hover:shadow-rose-500/40 transition-shadow"
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Revivir nuestra historia
+          </motion.button>
 
           {/* Add button / Form */}
           <AnimatePresence mode="wait">

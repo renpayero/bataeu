@@ -1,12 +1,12 @@
 'use client'
 
-import NavBar from './NavBar'
+import Sidebar from './Sidebar'
 
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <NavBar />
-      <main className="pb-24 md:pb-0 md:pt-16">
+      <Sidebar />
+      <main className="md:pl-60 min-h-screen pt-20 md:pt-0">
         {children}
       </main>
     </>

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { formatDistanceToNow, format, differenceInHours } from 'date-fns'
 import { es } from 'date-fns/locale'
 import AntojoForm, { type AntojoData } from '@/components/AntojoForm'
-import Mascot from '@/components/Mascot'
+import { BataCraving } from '@/components/BataEu'
 
 interface Antojo {
   id: number
@@ -197,17 +197,13 @@ export default function AntojosPage() {
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
             <div className="flex items-end gap-3 mb-6">
               <div className="flex-1 min-w-0">
-                <h2 className="text-3xl font-extrabold text-rose-700 mb-1">🍕 ¿Qué se te antojó hoy?</h2>
+                <h2 className="text-3xl font-extrabold text-rose-700 mb-1">🍫 ¿Qué se te antojó hoy?</h2>
                 <p className="text-sm text-gray-400 font-medium">
                   Escribí tus antojos acá. Él los va a ver. (No promete nada, igual.)
                 </p>
               </div>
-              <div className="flex-shrink-0">
-                <Mascot
-                  phase={3}
-                  variant="hungry"
-                  containerClassName="relative flex items-center justify-center w-[88px] h-[112px]"
-                />
+              <div className="flex-shrink-0 w-[100px] md:w-[130px]">
+                <BataCraving />
               </div>
             </div>
           </motion.div>
@@ -269,7 +265,7 @@ export default function AntojosPage() {
             {loading && (
               <div className="text-center pt-12">
                 <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 0.8, repeat: Infinity }} className="text-4xl">
-                  🍕
+                  🍫
                 </motion.div>
               </div>
             )}

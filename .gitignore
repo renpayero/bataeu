@@ -1,6 +1,14 @@
-.env
-.env.local
 node_modules/
 .next/
 .DS_Store
 *.log
+
+# Variables de entorno — NO commitear (.env.example sí se commitea)
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Galería: fotos/videos subidos por el usuario
+public/galeria/

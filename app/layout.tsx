@@ -16,8 +16,8 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Hormonitas 🩸',
-  description: 'Tu compañera del ciclo',
+  title: 'Bata Eu 🩸',
+  description: 'Nuestra cápsula',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

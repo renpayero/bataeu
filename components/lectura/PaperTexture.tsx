@@ -1,0 +1,20 @@
+export default function PaperTexture() {
+  return (
+    <svg
+      className="reading-grain"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <filter id="reading-noise">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.9"
+          numOctaves="2"
+          stitchTiles="stitch"
+        />
+        <feColorMatrix values="0 0 0 0 0.25  0 0 0 0 0.16  0 0 0 0 0.09  0 0 0 0.7 0" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#reading-noise)" />
+    </svg>
+  )
+}
