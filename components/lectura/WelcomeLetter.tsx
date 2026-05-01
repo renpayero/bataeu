@@ -100,54 +100,58 @@ export default function WelcomeLetter() {
                   initial={{ opacity: 0, rotateX: -40, y: -60 }}
                   animate={{ opacity: 1, rotateX: 0, y: 0 }}
                   transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-                  className="reading-paper-bg rounded-2xl p-8 md:p-10 shadow-2xl"
+                  className="reading-paper-bg rounded-2xl shadow-2xl flex flex-col max-h-[calc(100dvh-2rem)] overflow-hidden"
                   style={{
                     border: '1px solid var(--reading-border)',
                     boxShadow:
                       '0 25px 70px rgba(76,10,31,0.4), inset 0 0 80px rgba(225, 29, 72, 0.05)',
                   }}
                 >
-                  <p
-                    className="text-xs uppercase tracking-widest reading-ink-faded mb-3"
-                    style={{ fontFamily: 'var(--font-playfair), serif' }}
-                  >
-                    {FIRST_ENTRY_LETTER.heading}
-                  </p>
-                  <p
-                    className="text-lg reading-ink-text leading-relaxed whitespace-pre-line"
-                    style={{
-                      fontFamily: 'var(--font-playfair), serif',
-                      fontStyle: 'italic',
-                    }}
-                  >
-                    {FIRST_ENTRY_LETTER.body.replace('{name}', READER_NAME)}
-                  </p>
-                  <p
-                    className="mt-6 text-right reading-ink-text"
-                    style={{
-                      fontFamily: 'var(--font-playfair), serif',
-                      fontSize: 22,
-                    }}
-                  >
-                    {FIRST_ENTRY_LETTER.signature}
-                  </p>
+                  <div className="overflow-y-auto overscroll-contain px-8 md:px-10 pt-8 md:pt-10 pb-2">
+                    <p
+                      className="text-xs uppercase tracking-widest reading-ink-faded mb-3"
+                      style={{ fontFamily: 'var(--font-playfair), serif' }}
+                    >
+                      {FIRST_ENTRY_LETTER.heading}
+                    </p>
+                    <p
+                      className="text-lg reading-ink-text leading-relaxed whitespace-pre-line"
+                      style={{
+                        fontFamily: 'var(--font-playfair), serif',
+                        fontStyle: 'italic',
+                      }}
+                    >
+                      {FIRST_ENTRY_LETTER.body.replace('{name}', READER_NAME)}
+                    </p>
+                    <p
+                      className="mt-6 text-right reading-ink-text"
+                      style={{
+                        fontFamily: 'var(--font-playfair), serif',
+                        fontSize: 22,
+                      }}
+                    >
+                      {FIRST_ENTRY_LETTER.signature}
+                    </p>
+                  </div>
 
-                  <motion.button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      close()
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="mt-8 w-full py-3 rounded-2xl font-bold text-sm shimmer-btn"
-                    style={{
-                      background:
-                        'linear-gradient(135deg, var(--reading-accent), var(--reading-accent-deep))',
-                      color: 'white',
-                    }}
-                  >
-                    Entrar a mi rincón
-                  </motion.button>
+                  <div className="px-8 md:px-10 pb-8 md:pb-10 pt-4 shrink-0">
+                    <motion.button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        close()
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full py-3 rounded-2xl font-bold text-sm shimmer-btn"
+                      style={{
+                        background:
+                          'linear-gradient(135deg, var(--reading-accent), var(--reading-accent-deep))',
+                        color: 'white',
+                      }}
+                    >
+                      Entrar a mi rincón
+                    </motion.button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

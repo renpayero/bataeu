@@ -103,7 +103,7 @@ export default function WelcomeLetter({ content }: Props) {
                   initial={{ opacity: 0, rotateX: -40, y: -60 }}
                   animate={{ opacity: 1, rotateX: 0, y: 0 }}
                   transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-                  className="rounded-2xl p-8 md:p-10 shadow-2xl"
+                  className="rounded-2xl shadow-2xl flex flex-col max-h-[calc(100dvh-2rem)] overflow-hidden"
                   style={{
                     background:
                       'linear-gradient(135deg, #fffaf3 0%, #fef3c7 100%)',
@@ -112,51 +112,55 @@ export default function WelcomeLetter({ content }: Props) {
                       '0 25px 70px rgba(20,6,24,0.4), inset 0 0 80px rgba(225, 29, 72, 0.05)',
                   }}
                 >
-                  <p
-                    className="text-xs uppercase tracking-widest mb-3"
-                    style={{
-                      fontFamily: 'var(--font-playfair), serif',
-                      color: '#a16207',
-                    }}
-                  >
-                    {content.heading}
-                  </p>
-                  <p
-                    className="text-base md:text-lg leading-relaxed whitespace-pre-line"
-                    style={{
-                      fontFamily: 'var(--font-playfair), serif',
-                      fontStyle: 'italic',
-                      color: '#451a03',
-                    }}
-                  >
-                    {content.body}
-                  </p>
-                  <p
-                    className="mt-6 text-right"
-                    style={{
-                      fontFamily: 'var(--font-playfair), serif',
-                      fontSize: 22,
-                      color: '#451a03',
-                    }}
-                  >
-                    {content.signature}
-                  </p>
+                  <div className="overflow-y-auto overscroll-contain px-8 md:px-10 pt-8 md:pt-10 pb-2">
+                    <p
+                      className="text-xs uppercase tracking-widest mb-3"
+                      style={{
+                        fontFamily: 'var(--font-playfair), serif',
+                        color: '#a16207',
+                      }}
+                    >
+                      {content.heading}
+                    </p>
+                    <p
+                      className="text-base md:text-lg leading-relaxed whitespace-pre-line"
+                      style={{
+                        fontFamily: 'var(--font-playfair), serif',
+                        fontStyle: 'italic',
+                        color: '#451a03',
+                      }}
+                    >
+                      {content.body}
+                    </p>
+                    <p
+                      className="mt-6 text-right"
+                      style={{
+                        fontFamily: 'var(--font-playfair), serif',
+                        fontSize: 22,
+                        color: '#451a03',
+                      }}
+                    >
+                      {content.signature}
+                    </p>
+                  </div>
 
-                  <motion.button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      close()
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="mt-8 w-full py-3 rounded-2xl font-bold text-sm shimmer-btn"
-                    style={{
-                      background: buttonBg,
-                      color: 'white',
-                    }}
-                  >
-                    {content.buttonLabel}
-                  </motion.button>
+                  <div className="px-8 md:px-10 pb-8 md:pb-10 pt-4 shrink-0">
+                    <motion.button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        close()
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full py-3 rounded-2xl font-bold text-sm shimmer-btn"
+                      style={{
+                        background: buttonBg,
+                        color: 'white',
+                      }}
+                    >
+                      {content.buttonLabel}
+                    </motion.button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
