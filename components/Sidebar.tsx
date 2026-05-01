@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import PushToggle from './PushToggle'
 
 interface NavTab {
   href: string
@@ -137,7 +138,11 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="px-6 py-4 text-[10px] text-gray-400 uppercase tracking-wider">
+      <div className="px-3 pb-3">
+        <PushToggle />
+      </div>
+
+      <div className="px-6 py-4 text-[10px] text-gray-500 uppercase tracking-wider">
         Hecho con amor
       </div>
     </>
@@ -161,7 +166,8 @@ export default function Sidebar() {
         onClick={() => setOpen(true)}
         whileTap={{ scale: 0.92 }}
         whileHover={{ scale: 1.05 }}
-        className="md:hidden fixed top-4 left-4 z-40 w-11 h-11 rounded-2xl flex items-center justify-center glass-strong"
+        className="md:hidden fixed left-4 z-40 w-11 h-11 rounded-2xl flex items-center justify-center glass-strong"
+        style={{ top: 'calc(env(safe-area-inset-top) + 1rem)' }}
         aria-label="Abrir menú"
       >
         <span className="flex flex-col gap-[4px]">
@@ -177,20 +183,23 @@ export default function Sidebar() {
           <>
             <motion.div
               key="backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, pointerEvents: 'none' }}
+              animate={{ opacity: 1, pointerEvents: 'auto' }}
+              exit={{ opacity: 0, pointerEvents: 'none' }}
               onClick={() => setOpen(false)}
               className="md:hidden fixed inset-0 z-40"
-              style={{ background: 'rgba(159, 18, 57, 0.45)', backdropFilter: 'blur(4px)' }}
+              style={{
+                background: 'rgba(159, 18, 57, 0.45)',
+                backdropFilter: 'blur(4px)',
+              }}
             />
             <motion.aside
               key="drawer"
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
+              initial={{ x: '-100%', pointerEvents: 'none' }}
+              animate={{ x: 0, pointerEvents: 'auto' }}
+              exit={{ x: '-100%', pointerEvents: 'none' }}
               transition={{ type: 'spring', stiffness: 380, damping: 36 }}
-              className="md:hidden fixed top-0 left-0 h-full w-72 z-50 flex flex-col glass-strong"
+              className="md:hidden fixed top-0 left-0 h-full w-64 sm:w-72 z-50 flex flex-col glass-strong pt-safe pb-safe"
               style={{
                 background: 'rgba(255, 241, 244, 0.96)',
                 borderRight: '1px solid rgba(244, 63, 94, 0.22)',

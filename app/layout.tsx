@@ -1,7 +1,8 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Nunito, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import ClientShell from '@/components/ClientShell'
+import RegisterSW from '@/components/RegisterSW'
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -16,8 +17,24 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Bata Eu 🩸',
+  title: 'Hormonitas',
   description: 'Nuestra cápsula',
+  applicationName: 'Hormonitas',
+  appleWebApp: {
+    capable: true,
+    title: 'Hormonitas',
+    statusBarStyle: 'black-translucent',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#f43f5e',
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -25,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className={`${nunito.variable} ${playfair.variable}`}>
       <body className="min-h-screen font-nunito antialiased">
         <ClientShell>{children}</ClientShell>
+        <RegisterSW />
       </body>
     </html>
   )

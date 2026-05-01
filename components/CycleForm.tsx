@@ -95,6 +95,7 @@ export default function CycleForm({ onSaved, onClose }: CycleFormProps) {
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
+                      inputMode="numeric"
                       value={cycleLength}
                       onChange={(e) => setCycleLength(Number(e.target.value))}
                       min={21}
@@ -111,6 +112,7 @@ export default function CycleForm({ onSaved, onClose }: CycleFormProps) {
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
+                      inputMode="numeric"
                       value={periodLength}
                       onChange={(e) => setPeriodLength(Number(e.target.value))}
                       min={2}

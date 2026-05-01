@@ -447,7 +447,7 @@ export default function ReadingTimer({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.92, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-            className="reading-glass-strong rounded-3xl w-full max-w-md p-6 md:p-8 relative"
+            className="reading-glass-strong rounded-3xl w-full max-w-md p-4 sm:p-6 md:p-8 relative"
           >
             {/* Close X */}
             <button
@@ -535,6 +535,7 @@ export default function ReadingTimer({
                   </span>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={endPage}
                     onChange={(e) => setEndPage(e.target.value)}
                     min={0}
@@ -625,7 +626,7 @@ export default function ReadingTimer({
                 )}
 
                 {/* SVG circle */}
-                <div className="relative mx-auto mt-4 w-[260px] h-[260px]">
+                <div className="relative mx-auto mt-4 w-[220px] h-[220px] sm:w-[260px] sm:h-[260px]">
                   <svg
                     viewBox="0 0 260 260"
                     className="absolute inset-0 -rotate-90"
@@ -659,7 +660,7 @@ export default function ReadingTimer({
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span
-                      className="text-5xl md:text-6xl font-bold reading-ink-text tabular-nums"
+                      className="text-4xl sm:text-5xl md:text-6xl font-bold reading-ink-text tabular-nums"
                       style={{ fontFamily: 'var(--font-playfair), serif' }}
                     >
                       {formatMMSS(displaySecs)}

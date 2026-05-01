@@ -1,0 +1,31 @@
+# Archivos que NO van al build context (más rápido)
+
+# Build artifacts y deps locales
+node_modules
+.next
+out
+
+# Editor y SO
+.git
+.vscode
+.idea
+.DS_Store
+*.swp
+*.log
+tsconfig.tsbuildinfo
+
+# Local-only (overrides, no se usan en Docker)
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Backups y staging local — no van al container
+public/memories/_hevc_originals
+public/galeria
+fotos
+"screens debug"
+
+# Docs y planning (no afectan el runtime)
+*.md
+!CLAUDE.md

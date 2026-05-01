@@ -25,6 +25,7 @@ interface Props {
 
 export default function UploadForm({ specialDates, onUploaded, onSpecialDatesChanged }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState<{ current: number; total: number } | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -70,6 +71,7 @@ export default function UploadForm({ specialDates, onUploaded, onSpecialDatesCha
       setTakenAt(todayIso())
       setMilestoneValue('')
       if (inputRef.current) inputRef.current.value = ''
+      if (cameraInputRef.current) cameraInputRef.current.value = ''
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al subir')
     } finally {
@@ -110,6 +112,7 @@ export default function UploadForm({ specialDates, onUploaded, onSpecialDatesCha
         </select>
       </div>
 
+      {/* Hidden inputs — galería y cámara */}
       <input
         ref={inputRef}
         type="file"
@@ -117,8 +120,38 @@ export default function UploadForm({ specialDates, onUploaded, onSpecialDatesCha
         multiple
         onChange={(e) => handleFiles(e.target.files)}
         disabled={uploading}
-        className="block w-full text-sm text-rose-900/70 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-bold file:bg-rose-500 file:text-white hover:file:bg-rose-600 file:cursor-pointer disabled:opacity-60"
+        className="hidden"
       />
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*,video/*"
+        capture="environment"
+        onChange={(e) => handleFiles(e.target.files)}
+        disabled={uploading}
+        className="hidden"
+      />
+
+      <div className="grid grid-cols-2 gap-2">
+        <motion.button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          whileTap={{ scale: 0.97 }}
+          className="py-3 px-4 min-h-[48px] rounded-2xl font-bold text-white bg-rose-500 hover:bg-rose-600 disabled:opacity-60 text-sm shadow-md shadow-rose-500/20"
+        >
+          📁 Galería
+        </motion.button>
+        <motion.button
+          type="button"
+          onClick={() => cameraInputRef.current?.click()}
+          disabled={uploading}
+          whileTap={{ scale: 0.97 }}
+          className="py-3 px-4 min-h-[48px] rounded-2xl font-bold text-rose-700 bg-white/70 hover:bg-white border border-rose-200 disabled:opacity-60 text-sm"
+        >
+          📸 Tomar foto
+        </motion.button>
+      </div>
 
       {progress && (
         <motion.p

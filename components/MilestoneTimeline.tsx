@@ -79,9 +79,9 @@ export default function MilestoneTimeline({ startDate, specialDates, onEdit, onD
       )}
 
       {/* Timeline */}
-      <div className="relative pl-8">
+      <div className="relative pl-6 sm:pl-8">
         {/* Vertical line */}
-        <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-rose-200/60" />
+        <div className="absolute left-2 sm:left-3 top-0 bottom-0 w-0.5 bg-rose-200/60" />
 
         <div className="space-y-4">
           {items.map((item, index) => {
@@ -102,7 +102,7 @@ export default function MilestoneTimeline({ startDate, specialDates, onEdit, onD
                     ? 'bg-rose-100 text-rose-500'
                     : isNext
                       ? 'bg-rose-500 text-white ring-4 ring-rose-200'
-                      : 'bg-gray-100 text-gray-400'
+                      : 'bg-gray-100 text-gray-500'
                 }`}>
                   {isPast ? '✓' : item.emoji}
                 </div>
@@ -123,7 +123,7 @@ export default function MilestoneTimeline({ startDate, specialDates, onEdit, onD
                       <p className={`font-bold text-sm ${isPast ? 'text-gray-600' : 'text-rose-700'}`}>
                         {item.label}
                       </p>
-                      <p className="text-xs text-gray-400 font-medium">
+                      <p className="text-xs text-gray-500 font-medium">
                         {format(item.date, "d 'de' MMMM, yyyy", { locale: es })}
                       </p>
                     </div>

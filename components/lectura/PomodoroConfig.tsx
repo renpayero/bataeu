@@ -125,6 +125,7 @@ export default function PomodoroConfig({ open, onClose, onPick }: Props) {
                     <div className="flex gap-2">
                       <input
                         type="number"
+                        inputMode="numeric"
                         value={customVal}
                         onChange={(e) => setCustomVal(e.target.value)}
                         min={1}

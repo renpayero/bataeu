@@ -55,7 +55,10 @@ export default function RelationshipCounter() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
       >
-        <span className="font-playfair text-7xl sm:text-8xl font-extrabold text-rose-600 leading-none">
+        <span
+          className="font-playfair text-7xl sm:text-8xl font-extrabold text-rose-600 leading-none"
+          suppressHydrationWarning
+        >
           {diff.days}
         </span>
         <p className="text-sm font-bold text-rose-400 mt-2 uppercase tracking-widest">
@@ -71,7 +74,10 @@ export default function RelationshipCounter() {
           { value: diff.seconds, label: 'seg' },
         ].map((item) => (
           <div key={item.label} className="flex flex-col items-center">
-            <span className="font-playfair text-2xl font-bold text-rose-500">
+            <span
+              className="font-playfair text-2xl font-bold text-rose-500"
+              suppressHydrationWarning
+            >
               {String(item.value).padStart(2, '0')}
             </span>
             <span className="text-[10px] font-bold text-rose-300 uppercase tracking-wider">

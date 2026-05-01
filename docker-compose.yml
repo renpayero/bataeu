@@ -1,31 +1,37 @@
-version: '3.8'
 services:
   db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: hormonitas
-      POSTGRES_PASSWORD: hormonitas123
-      POSTGRES_DB: hormonitas
+    image: postgres:15-alpine
+    container_name: hormonitas-db
+    restart: unless-stopped
+    env_file: .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      # Bind solo a localhost del VPS — postgres NO expuesto a internet
+      - "127.0.0.1:5433:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U hormonitas"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hormonitas-app
+    restart: unless-stopped
+    env_file: .env
     ports:
       - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      DATABASE_URL: postgresql://hormonitas:hormonitas123@db:5432/hormonitas
-      NODE_ENV: production
+    volumes:
+      # Galería de fotos subidas por la novia — persiste fuera del contenedor
+      # para no perderse al rebuilds. El path en host es ./uploads/galeria.
+      - ./uploads/galeria:/app/public/galeria
 
 volumes:
   postgres_data:
+    name: hormonitas_postgres_data

@@ -2,9 +2,16 @@ node_modules/
 .next/
 .DS_Store
 *.log
+tsconfig.tsbuildinfo
 
-# Variables de entorno — NO commitear (.env.example sí se commitea)
-.env
+# Backup de los videos originales HEVC (los servidos son la versión H.264 convertida)
+public/memories/_hevc_originals/
+
+# Variables de entorno
+# Nota: este es un repo privado de uso personal, así que .env SÍ se commitea
+# (ahí van las VAPID keys, DB credentials, etc — todo lo que necesita el VPS).
+# Si en el futuro el repo se vuelve público, mover los secretos fuera y
+# volver a gitignorear .env.
 .env.local
 .env.*.local
 .env.development
@@ -12,3 +19,9 @@ node_modules/
 
 # Galería: fotos/videos subidos por el usuario
 public/galeria/
+
+# Staging de fotos locales (no las versionamos — van a public/memories cuando corresponde)
+fotos/
+
+# Screenshots de debug
+screens debug/

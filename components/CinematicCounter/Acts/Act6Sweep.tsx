@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import MemoryFrame from '../MemoryFrame'
 import { shuffled } from '../memoriesManifest'
 import { SWEEP_TAGLINE, FLOATING_WORDS } from '../cinematicData'
@@ -15,20 +16,39 @@ import { SWEEP_TAGLINE, FLOATING_WORDS } from '../cinematicData'
 export default function Act6Sweep() {
   const pool = shuffled(23, true).slice(0, 6)
 
-  // Direcciones de entrada (x, y, rotate)
-  const enters = [
-    { x: -600, y: -200, rotate: -24 },
-    { x: 600, y: -200, rotate: 24 },
-    { x: -600, y: 200, rotate: 18 },
-    { x: 600, y: 200, rotate: -18 },
-    { x: 0, y: -500, rotate: 6 },
-    { x: 0, y: 500, rotate: -6 },
-  ]
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
-  // Posiciones finales en abanico horizontal (x offset en px).
-  // Separación ~190px entre centros: se nota que son fotos distintas
-  // sin perder la sensación de "pila de Polaroid".
-  const fanPositions = [-480, -285, -92, 92, 285, 480]
+  // Direcciones de entrada (x, y, rotate) — más cortas en mobile para no
+  // sobreesfuerzo de animación.
+  const enters = isMobile
+    ? [
+        { x: -250, y: -120, rotate: -22 },
+        { x: 250, y: -120, rotate: 22 },
+        { x: -250, y: 120, rotate: 16 },
+        { x: 250, y: 120, rotate: -16 },
+        { x: 0, y: -300, rotate: 6 },
+        { x: 0, y: 300, rotate: -6 },
+      ]
+    : [
+        { x: -600, y: -200, rotate: -24 },
+        { x: 600, y: -200, rotate: 24 },
+        { x: -600, y: 200, rotate: 18 },
+        { x: 600, y: 200, rotate: -18 },
+        { x: 0, y: -500, rotate: 6 },
+        { x: 0, y: 500, rotate: -6 },
+      ]
+
+  // Posiciones finales en abanico horizontal (x offset en px desde center).
+  // Mobile: spread ~270px (cabe en 390px viewport); desktop: spread ~960px.
+  const fanPositions = isMobile
+    ? [-135, -82, -28, 28, 82, 135]
+    : [-480, -285, -92, 92, 285, 480]
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-[#050007]">
@@ -63,9 +83,10 @@ export default function Act6Sweep() {
         {pool.map((mem, i) => (
           <motion.div
             key={mem.src}
-            className="absolute w-[28vw] max-w-[260px] aspect-[3/4] rounded-xl overflow-hidden"
+            className="absolute w-[22vw] sm:w-[28vw] max-w-[260px] aspect-[3/4] rounded-xl overflow-hidden"
             style={{
               boxShadow: '0 25px 60px -12px rgba(244,63,94,0.55)',
+              willChange: 'transform, opacity',
             }}
             initial={{ x: enters[i].x, y: enters[i].y, rotate: enters[i].rotate, opacity: 0, scale: 0.7 }}
             animate={{

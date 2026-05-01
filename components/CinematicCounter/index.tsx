@@ -14,6 +14,7 @@ import Act4Crescendo from './Acts/Act4Crescendo'
 import Act5Anchor from './Acts/Act5Anchor'
 import Act6Sweep from './Acts/Act6Sweep'
 import Act7Finale from './Acts/Act7Finale'
+import PreWarmActs from './PreWarmActs'
 
 interface Props {
   onClose: () => void
@@ -153,6 +154,11 @@ export default function CinematicCounter({ onClose }: Props) {
       transition={{ duration: 0.9 }}
       style={{ background: '#000' }}
     >
+      {/* Pre-warm de actos: monta los 7 actos invisibles durante loading
+          para que el browser pre-compile shaders, suba textures a GPU y
+          haga layout. Cuando el user clica "Comenzar", todo está warm. */}
+      {(stage === 'loading' || stage === 'ready') && <PreWarmActs />}
+
       {/* Loading */}
       <AnimatePresence mode="wait">
         {stage === 'loading' && (
@@ -175,7 +181,7 @@ export default function CinematicCounter({ onClose }: Props) {
             <p className="text-xs uppercase tracking-[0.35em] text-rose-200/70 mb-3">
               Preparando los recuerdos
             </p>
-            <div className="w-56 h-1 rounded-full bg-white/10 overflow-hidden">
+            <div className="w-48 sm:w-56 h-1 rounded-full bg-white/10 overflow-hidden">
               <motion.div
                 className="h-full"
                 style={{

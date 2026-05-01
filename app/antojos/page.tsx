@@ -197,12 +197,12 @@ export default function AntojosPage() {
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
             <div className="flex items-end gap-3 mb-6">
               <div className="flex-1 min-w-0">
-                <h2 className="text-3xl font-extrabold text-rose-700 mb-1">🍫 ¿Qué se te antojó hoy?</h2>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-rose-700 mb-1">🍫 ¿Qué se te antojó hoy?</h2>
                 <p className="text-sm text-gray-400 font-medium">
                   Escribí tus antojos acá. Él los va a ver. (No promete nada, igual.)
                 </p>
               </div>
-              <div className="flex-shrink-0 w-[100px] md:w-[130px]">
+              <div className="flex-shrink-0 w-[80px] sm:w-[100px] md:w-[130px]">
                 <BataCraving />
               </div>
             </div>

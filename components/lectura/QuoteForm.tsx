@@ -140,6 +140,7 @@ export default function QuoteForm({
         </span>
         <input
           type="number"
+          inputMode="numeric"
           value={page}
           onChange={(e) => setPage(e.target.value)}
           className="w-full reading-glass rounded-xl px-3 py-2 text-sm reading-ink-text focus:outline-none"

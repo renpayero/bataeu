@@ -52,6 +52,25 @@ model AppSetting {
   updatedAt DateTime @updatedAt
 }
 
+// ─── Push notifications ──────────────────────────────────
+// Una row por device suscripto. userLabel permite rutear mensajes
+// (ej. "novia" recibe notifs del ciclo, "renzo" recibe recordatorios
+// de fechas especiales). Si userLabel es null, recibe todo.
+
+model PushSubscription {
+  id           Int      @id @default(autoincrement())
+  endpoint     String   @unique
+  p256dh       String
+  auth         String
+  userLabel    String?
+  userAgent    String?
+  failureCount Int      @default(0)
+  createdAt    DateTime @default(now())
+  lastSeenAt   DateTime @default(now())
+
+  @@index([userLabel])
+}
+
 // ─── Módulo Lectura ──────────────────────────────────────
 
 model Series {

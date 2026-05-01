@@ -137,7 +137,7 @@ export default function CicloPage() {
               </motion.div>
             </div>
           ) : (
-            <div className="flex flex-col lg:flex-row gap-6 items-start">
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start">
               {/* LEFT: Mascot + Phase card */}
               <div className="w-full lg:w-72 flex flex-col items-center">
                 {currentPhase ? (

@@ -111,7 +111,7 @@ export default function GaleriaClient() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
             {photos.map((p) => (
               <PhotoCard key={p.id} photo={p} onOpen={() => setLightbox(p)} />
             ))}

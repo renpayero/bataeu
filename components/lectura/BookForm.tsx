@@ -165,6 +165,7 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
           <Field label="Páginas">
             <input
               type="number"
+              inputMode="numeric"
               value={pages}
               onChange={(e) => setPages(e.target.value)}
               className="reading-input"
@@ -174,6 +175,7 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
           <Field label="Año">
             <input
               type="number"
+              inputMode="numeric"
               value={year}
               onChange={(e) => setYear(e.target.value)}
               className="reading-input"

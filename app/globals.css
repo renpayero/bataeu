@@ -342,3 +342,47 @@ body.cinematic-active {
 /* ── Custom scrollbar dentro del scope ──────────────────── */
 .reading-scope ::-webkit-scrollbar-track { background: var(--reading-cream-deep); }
 .reading-scope ::-webkit-scrollbar-thumb { background: var(--reading-border); }
+
+/* ═══════════════════════════════════════════════════════ */
+/* ═══════════════ PWA / MOBILE (iOS/Android) ═══════════════ */
+/* ═══════════════════════════════════════════════════════ */
+
+/* Quita el highlight gris feo al tocar interactivos en iOS */
+a, button, [role="button"], input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Evita zoom automático al enfocar inputs en iOS Safari (requiere ≥16px).
+   Lo forzamos solo en mobile para no chocar con diseños específicos en desktop. */
+@media (max-width: 768px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* Safe area utilities — pensadas para combinarlas con Tailwind (ej. pb-safe) */
+.pt-safe { padding-top: env(safe-area-inset-top); }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+.pl-safe { padding-left: env(safe-area-inset-left); }
+.pr-safe { padding-right: env(safe-area-inset-right); }
+.mt-safe { margin-top: env(safe-area-inset-top); }
+.mb-safe { margin-bottom: env(safe-area-inset-bottom); }
+
+/* Para header/drawer fijos que deben respetar el notch */
+.top-safe { top: env(safe-area-inset-top); }
+.bottom-safe { bottom: env(safe-area-inset-bottom); }
+
+/* Control del overscroll (rubber band) en iOS cuando la app está en standalone */
+html {
+  overscroll-behavior-y: none;
+}
+
+/* Cuando la PWA corre en standalone, body ocupa toda la viewport visual */
+@media all and (display-mode: standalone) {
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}

@@ -1,13 +1,17 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import NosotrosBackground from '@/components/NosotrosBackground'
 import RelationshipCounter from '@/components/RelationshipCounter'
 import MilestoneTimeline from '@/components/MilestoneTimeline'
 import SpecialDateForm, { type SpecialDateData } from '@/components/SpecialDateForm'
-import CinematicCounter from '@/components/CinematicCounter'
 import { COUPLE_START_DATE } from '@/lib/coupleConfig'
+
+const CinematicCounter = dynamic(() => import('@/components/CinematicCounter'), {
+  ssr: false,
+})
 
 export default function NosotrosPage() {
   const [specialDates, setSpecialDates] = useState<SpecialDateData[]>([])

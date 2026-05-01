@@ -63,7 +63,7 @@ export default function Act1Opening() {
           transition={{ duration: 3.8, delay: 0.8, times: [0, 0.18, 0.85, 1] }}
         >
           <motion.span
-            className="text-5xl md:text-7xl font-playfair text-white"
+            className="text-4xl sm:text-5xl md:text-7xl font-playfair text-white"
             initial={{ y: -60, filter: 'blur(18px)' }}
             animate={{ y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 1.1, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
@@ -72,7 +72,7 @@ export default function Act1Opening() {
             {COUPLE_NAMES.name1}
           </motion.span>
           <motion.span
-            className="text-3xl md:text-5xl text-rose-400"
+            className="text-2xl sm:text-3xl md:text-5xl text-rose-400"
             initial={{ rotate: -180, scale: 0, opacity: 0 }}
             animate={{ rotate: 0, scale: 1, opacity: 1 }}
             transition={{ duration: 1, delay: 1.4, ease: 'backOut' }}
@@ -81,7 +81,7 @@ export default function Act1Opening() {
             &
           </motion.span>
           <motion.span
-            className="text-5xl md:text-7xl font-playfair text-white"
+            className="text-4xl sm:text-5xl md:text-7xl font-playfair text-white"
             initial={{ y: -60, filter: 'blur(18px)' }}
             animate={{ y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 1.1, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}

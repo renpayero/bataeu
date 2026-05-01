@@ -105,6 +105,7 @@ export default function SessionEditModal({ session, onClose, onSaved }: Props) {
                 </span>
                 <input
                   type="number"
+                  inputMode="numeric"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
                   min={SESSION_MIN_MINUTES}
@@ -120,6 +121,7 @@ export default function SessionEditModal({ session, onClose, onSaved }: Props) {
                   </span>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={pages}
                     onChange={(e) => setPages(e.target.value)}
                     min={0}
@@ -132,6 +134,7 @@ export default function SessionEditModal({ session, onClose, onSaved }: Props) {
                   </span>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={endPage}
                     onChange={(e) => setEndPage(e.target.value)}
                     min={0}

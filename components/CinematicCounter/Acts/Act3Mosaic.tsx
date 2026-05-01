@@ -39,19 +39,43 @@ export default function Act3Mosaic() {
             style={{
               gridArea: corners[i].gridArea,
               boxShadow: '0 20px 60px -10px rgba(244,63,94,0.35)',
+              willChange: 'transform, opacity',
             }}
             initial={{ ...corners[i].initial, opacity: 0, scale: 0.8 }}
             animate={{
-              x: [corners[i].initial.x, 0, 0, 0],
-              y: [corners[i].initial.y, 0, 0, 0],
-              rotate: [corners[i].initial.rotate, 0, 0, corners[i].initial.rotate * 0.3],
-              scale: [0.8, 1, 1.02, 1],
-              opacity: [0, 1, 1, 0.3],
+              // 6 keyframes: entrada → en lugar → respira → SQUASH → STRETCH+hop
+              // → scatter cruzado. El squash + stretch da el rebote tipo cartoon.
+              x: [
+                corners[i].initial.x,
+                0,
+                0,
+                0,
+                0,
+                -corners[i].initial.x * 0.6,
+              ],
+              y: [
+                corners[i].initial.y,
+                0,
+                0,
+                4, // squash: hunde un toque
+                -14, // stretch: salta hacia arriba
+                -corners[i].initial.y * 0.6,
+              ],
+              rotate: [
+                corners[i].initial.rotate,
+                0,
+                0,
+                0,
+                corners[i].initial.rotate * 0.4,
+                corners[i].initial.rotate * 4 + i * 30,
+              ],
+              scale: [0.8, 1, 1.02, 0.92, 1.18, 0.4],
+              opacity: [0, 1, 1, 1, 1, 0],
             }}
             transition={{
               duration: 6.5,
               delay: i * 0.12,
-              times: [0, 0.2, 0.85, 1],
+              times: [0, 0.18, 0.65, 0.78, 0.88, 1],
               ease: [0.22, 1, 0.36, 1],
             }}
           >
@@ -67,15 +91,29 @@ export default function Act3Mosaic() {
         ))}
       </div>
 
-      {/* Título flotante central — aparece, palpita y se desvanece */}
+      {/* Flash rosa corto justo antes del corte — solo opacity (cheap) */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(circle at 50% 50%, rgba(255,200,210,0.9), rgba(244,63,94,0.4) 60%, transparent 90%)',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0, 0, 0, 0.7, 0] }}
+        transition={{ duration: 6.5, times: [0, 0.7, 0.85, 0.9, 0.93, 1] }}
+      />
+
+      {/* Título flotante central — aparece, palpita y sale con zoom-in
+          (la cámara entra dentro del título). Solo transform + opacity. */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        style={{ willChange: 'transform, opacity' }}
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{
-          opacity: [0, 0, 1, 1, 0],
-          scale: [0.85, 0.85, 1, 1.04, 1.1],
+          opacity: [0, 0, 1, 1, 1, 0],
+          scale: [0.85, 0.85, 1, 1.04, 1.6, 2.4],
         }}
-        transition={{ duration: 6.5, times: [0, 0.25, 0.45, 0.75, 1] }}
+        transition={{ duration: 6.5, times: [0, 0.25, 0.45, 0.7, 0.9, 1] }}
       >
         <div
           className="px-6 py-3 rounded-full"

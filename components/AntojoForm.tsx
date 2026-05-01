@@ -141,7 +141,7 @@ export default function AntojoForm({
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: -4 }}
                 transition={{ duration: 0.15 }}
-                className="absolute top-12 left-0 z-20 rounded-2xl p-3 shadow-xl grid grid-cols-5 gap-1 max-w-[280px]"
+                className="absolute top-12 left-0 z-20 rounded-2xl p-3 shadow-xl grid grid-cols-4 sm:grid-cols-5 gap-1 max-w-[220px] sm:max-w-[280px]"
                 style={{
                   background: 'rgba(255,255,255,0.95)',
                   backdropFilter: 'blur(20px)',
@@ -149,7 +149,7 @@ export default function AntojoForm({
                 }}
               >
                 {/* Labels */}
-                <p className="col-span-5 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">¿Cómo te sentís?</p>
+                <p className="col-span-4 sm:col-span-5 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">¿Cómo te sentís?</p>
                 {MOOD_EMOJIS.map((e) => (
                   <motion.button
                     key={e}

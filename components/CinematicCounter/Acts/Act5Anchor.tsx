@@ -19,16 +19,30 @@ export default function Act5Anchor() {
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-black">
-      {/* Fondo muy blureado con leve ken-burns */}
-      <motion.div
-        className="absolute inset-0"
-        style={{ filter: 'blur(40px) brightness(0.5) saturate(1.1)' }}
-        initial={{ scale: 1.25 }}
-        animate={{ scale: 1.45 }}
-        transition={{ duration: 5, ease: 'linear' }}
+      {/* Fondo blureado optimizado: render a baja resolución (200×300) con
+          blur(4px), después scale(7) — el blur opera sobre ~60k píxeles en
+          vez de 2.4M, es ~100x más cheap. Resultado visual idéntico al
+          blur(28px) full-size, pero GPU se queda libre para las palabras. */}
+      <div
+        className="absolute inset-0 overflow-hidden"
+        style={{ background: '#0b0108' }}
       >
-        <MemoryFrame memory={bg} />
-      </motion.div>
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: '200px',
+            height: '300px',
+            transform: 'translate(-50%, -50%) scale(7) translateZ(0)',
+            transformOrigin: 'center',
+            filter: 'blur(4px) brightness(0.5) saturate(1.1)',
+            willChange: 'transform',
+          }}
+        >
+          <MemoryFrame memory={bg} />
+        </div>
+      </div>
 
       {/* Overlay granate */}
       <div
@@ -50,11 +64,12 @@ export default function Act5Anchor() {
               <motion.span
                 key={i}
                 className="inline-block mr-2"
-                initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                style={{ willChange: 'transform, opacity' }}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
                   delay: 0.3 + i * 0.08,
-                  duration: 0.7,
+                  duration: 0.55,
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >

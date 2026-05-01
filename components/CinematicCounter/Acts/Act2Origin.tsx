@@ -17,16 +17,18 @@ export default function Act2Origin() {
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-black">
-      {/* Foto hero — entra con blur + scale down + leve pan */}
+      {/* Foto hero — entra con blur + scale down + leve pan.
+          Scale mínimo 1.18 para que aún con el pan no se vea borde negro. */}
       <motion.div
         className="absolute inset-0"
-        initial={{ scale: 1.35, filter: 'blur(20px)', opacity: 0 }}
+        style={{ willChange: 'transform, opacity' }}
+        initial={{ scale: 1.4, filter: 'blur(20px)', opacity: 0 }}
         animate={{
-          scale: [1.35, 1.08, 1.12],
+          scale: [1.4, 1.18, 1.22],
           filter: ['blur(20px)', 'blur(0px)', 'blur(0px)'],
           opacity: [0, 1, 1],
-          x: [0, -30, -50],
-          y: [0, 10, 20],
+          x: ['0%', '-2%', '-3.5%'],
+          y: ['0%', '1%', '2%'],
         }}
         transition={{
           duration: 5.5,
@@ -46,27 +48,29 @@ export default function Act2Origin() {
         }}
       />
 
-      {/* Badge top-right */}
+      {/* Badge top-right — en mobile usa right-3 para no salir de viewport */}
       <motion.div
-        className="absolute top-[10%] right-[7%] flex items-center gap-2 px-3 py-1.5 rounded-full"
+        className="absolute top-[10%] right-3 sm:right-[7%] flex items-center gap-2 px-3 py-1.5 rounded-full"
         style={{
           background: 'rgba(244, 63, 94, 0.18)',
           border: '1px solid rgba(244, 63, 94, 0.5)',
           backdropFilter: 'blur(10px)',
+          willChange: 'transform, opacity',
         }}
-        initial={{ x: 100, opacity: 0 }}
+        initial={{ x: 50, opacity: 0 }}
         animate={{ x: 0, opacity: [0, 1, 1, 1, 0] }}
         transition={{ duration: 5, delay: 1, times: [0, 0.15, 0.45, 0.9, 1] }}
       >
         <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
-        <span className="text-[10px] uppercase tracking-[0.25em] text-rose-100">
+        <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.25em] text-rose-100 whitespace-nowrap">
           {ORIGIN_TEXTS.badge}
         </span>
       </motion.div>
 
       {/* Día 1 — número gigante en top-left con paralaje leve */}
       <motion.div
-        className="absolute top-[10%] left-[6%] flex flex-col"
+        className="absolute top-[10%] left-3 sm:left-[6%] flex flex-col"
+        style={{ willChange: 'transform, opacity' }}
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: [0, 1, 1, 0], y: 0 }}
         transition={{ duration: 5, delay: 0.8, times: [0, 0.2, 0.85, 1] }}
@@ -82,10 +86,11 @@ export default function Act2Origin() {
         </span>
       </motion.div>
 
-      {/* Copy desde bottom-left */}
+      {/* Copy desde bottom-left — pan reducido en mobile */}
       <motion.div
-        className="absolute bottom-[12%] left-[6%] max-w-md"
-        initial={{ x: -80, opacity: 0 }}
+        className="absolute bottom-[12%] left-3 sm:left-[6%] right-3 sm:right-auto max-w-md"
+        style={{ willChange: 'transform, opacity' }}
+        initial={{ x: -40, opacity: 0 }}
         animate={{ x: 0, opacity: [0, 1, 1, 0] }}
         transition={{ duration: 4.5, delay: 2, times: [0, 0.2, 0.85, 1] }}
       >

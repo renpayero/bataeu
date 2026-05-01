@@ -101,7 +101,7 @@ export default function SpecialDateForm({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: -4 }}
               transition={{ duration: 0.15 }}
-              className="absolute top-12 left-0 z-20 rounded-2xl p-3 shadow-xl grid grid-cols-4 gap-1 max-w-[240px]"
+              className="absolute top-12 left-0 z-20 rounded-2xl p-3 shadow-xl grid grid-cols-4 gap-1 max-w-[200px] sm:max-w-[240px]"
               style={{
                 background: 'rgba(255,255,255,0.95)',
                 backdropFilter: 'blur(20px)',

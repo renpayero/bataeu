@@ -33,15 +33,36 @@ export default function Act4Crescendo() {
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-[#0a0108]">
-      {/* Título fijo en top-left como marca de acto */}
-      <motion.p
-        className="absolute top-[8%] left-[7%] text-xs uppercase tracking-[0.35em] text-rose-200/80 z-10"
+      {/* Título en top-left — entra desde la izquierda con un dot rosa
+          pulsante al lado, después flota suavemente con un breathing leve. */}
+      <motion.div
+        className="absolute top-[8%] left-3 sm:left-[7%] right-3 sm:right-auto flex items-center gap-2 z-10"
+        style={{ willChange: 'transform, opacity' }}
         initial={{ opacity: 0, x: -40 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
+        animate={{
+          opacity: 1,
+          x: 0,
+          y: [0, -2, 0, 2, 0],
+        }}
+        transition={{
+          opacity: { duration: 0.8 },
+          x: { duration: 0.8 },
+          y: { duration: 5, ease: 'easeInOut', repeat: Infinity, delay: 0.8 },
+        }}
       >
-        {CRESCENDO_TITLE}
-      </motion.p>
+        <motion.span
+          className="w-1.5 h-1.5 rounded-full bg-rose-400 flex-shrink-0"
+          animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.3, 1] }}
+          transition={{ duration: 1.6, ease: 'easeInOut', repeat: Infinity }}
+        />
+        <motion.p
+          className="text-xs uppercase tracking-[0.35em] text-rose-200/80"
+          animate={{ opacity: [0.7, 1, 0.7] }}
+          transition={{ duration: 3.2, ease: 'easeInOut', repeat: Infinity, delay: 1 }}
+        >
+          {CRESCENDO_TITLE}
+        </motion.p>
+      </motion.div>
 
       <AnimatePresence mode="sync">
         {beats.map((beatIndex) => {
