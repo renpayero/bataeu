@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { deleteFile } from '@/lib/galleria/storage'
+import { deleteFile, normalizeGalleryUrl } from '@/lib/galleria/storage'
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -47,7 +47,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       include: { specialDate: true },
     })
 
-    return NextResponse.json(updated)
+    return NextResponse.json({ ...updated, url: normalizeGalleryUrl(updated.url, updated.filename) })
   } catch (err) {
     console.error('[galeria:PUT]', err)
     return NextResponse.json({ error: 'Error al actualizar la foto' }, { status: 500 })

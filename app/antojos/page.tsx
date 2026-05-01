@@ -6,6 +6,8 @@ import { formatDistanceToNow, format, differenceInHours } from 'date-fns'
 import { es } from 'date-fns/locale'
 import AntojoForm, { type AntojoData } from '@/components/AntojoForm'
 import { BataCraving } from '@/components/BataEu'
+import WelcomeLetter from '@/components/WelcomeLetter'
+import { WELCOME_ANTOJOS } from '@/lib/welcomeLetters'
 
 interface Antojo {
   id: number
@@ -192,6 +194,7 @@ export default function AntojosPage() {
   return (
     <>
       <FoodBackground />
+      <WelcomeLetter content={WELCOME_ANTOJOS} />
       <div className="min-h-screen">
         <div className="max-w-2xl mx-auto px-4 py-8">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>

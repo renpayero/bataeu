@@ -85,9 +85,17 @@ export default function PushToggle() {
         setStatus({ kind: 'denied' })
         return
       }
-      await subscribePush(labelChoice)
+      const sub = await subscribePush(labelChoice)
       localStorage.setItem('hormonitas-push-label', labelChoice)
       setStatus({ kind: 'subscribed', label: labelChoice })
+      // Notif de prueba para confirmar que efectivamente funcionan.
+      fetch('/api/push/welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ endpoint: sub.endpoint }),
+      }).catch(() => {
+        // silencioso: no romper el flujo si falla
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al activar')
     } finally {

@@ -1,7 +1,8 @@
 import type { CycleEntry, SpecialDate } from '@prisma/client'
 import { differenceInCalendarDays } from 'date-fns'
 import { getPhaseForDate, type Phase } from '@/lib/cycleLogic'
-import { getCycleOwnerName } from '@/lib/coupleConfig'
+import { COUPLE_NICKNAMES, COUPLE_START_DATE } from '@/lib/coupleConfig'
+import { generateMilestones } from '@/lib/milestones'
 import type { PushPayload } from './sender'
 
 export type ScheduledNotification = {
@@ -12,38 +13,30 @@ export type ScheduledNotification = {
 const todayIso = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
-// ─── Mensajes por fase del ciclo ─────────────────────────
+// ─── Mensajes para REN cuando CAMI cambia de fase ─────────
 
-type CycleMsg = (day: number) => { title: string; body: string }
-
-const PHASE_MSG: Record<Phase, CycleMsg> = {
-  1: (day) =>
-    day === 1
-      ? {
-          title: '🩸 Día 1 de tu ciclo',
-          body: 'Hoy comienza. Hidratáte, descansá y mimáte. Estoy con vos.',
-        }
-      : {
-          title: `🩸 Día ${day} — menstruación`,
-          body: 'Que no se te olvide tomar agua y darte mimo extra hoy.',
-        },
-  2: (day) => ({
-    title: `🌱 Día ${day} — folicular`,
-    body: 'Energía en alza. Buen día para empezar lo que tenías ganas.',
-  }),
-  3: (day) => ({
-    title: `✨ Día ${day} — ovulación`,
-    body: 'Pico hormonal. Estás en tu mejor momento del ciclo.',
-  }),
-  4: (day) => ({
-    title: `🌙 Día ${day} — lútea`,
-    body: 'Si te sentís sensible, está bien. Cuidate.',
-  }),
+const PHASE_ENTRY_MSG: Record<Phase, { title: string; body: string }> = {
+  1: {
+    title: `🩸 ${COUPLE_NICKNAMES.name2} arrancó el período`,
+    body: 'Se viene la fase de menstruación. Mimá, abrazos y mucha agua.',
+  },
+  2: {
+    title: `🌱 ${COUPLE_NICKNAMES.name2} entró en folicular`,
+    body: 'Energía en alza estos días. Buen momento para planear cosas juntos.',
+  },
+  3: {
+    title: `✨ ${COUPLE_NICKNAMES.name2} está en ovulación`,
+    body: 'Pico hormonal. Está en su mejor momento del ciclo.',
+  },
+  4: {
+    title: `🌙 ${COUPLE_NICKNAMES.name2} entró en lútea`,
+    body: 'Puede estar más sensible en estos días. Banca y paciencia.',
+  },
 }
 
 /**
- * Construye la notificación diaria del ciclo según el último CycleEntry.
- * Devuelve null si no hay entry.
+ * Notif al PARTNER (Ren) solo en el día que CAMBIA la fase del ciclo.
+ * Devuelve null si hoy no es transición.
  */
 export function buildCycleNotification(
   entry: CycleEntry | null,
@@ -51,24 +44,36 @@ export function buildCycleNotification(
 ): ScheduledNotification | null {
   if (!entry) return null
   const info = getPhaseForDate(today, entry.startDate, entry.cycleLength, entry.periodLength)
-  const msg = PHASE_MSG[info.phase](info.dayOfCycle)
+  const periodLength = entry.periodLength
+  const ovulationDay = entry.cycleLength - 14
+
+  const isTransition =
+    info.dayOfCycle === 1 ||
+    info.dayOfCycle === periodLength + 1 ||
+    info.dayOfCycle === ovulationDay ||
+    info.dayOfCycle === ovulationDay + 1
+
+  if (!isTransition) return null
+
+  const msg = PHASE_ENTRY_MSG[info.phase]
   return {
-    audience: getCycleOwnerName(),
+    audience: COUPLE_NICKNAMES.name1,
     payload: {
       title: msg.title,
       body: msg.body,
       url: '/ciclo',
-      tag: `cycle-${todayIso(today)}`,
+      tag: `cycle-phase-${info.phase}-${todayIso(today)}`,
     },
   }
 }
 
-// ─── Mensajes de fechas especiales ───────────────────────
+// ─── Mensajes de fechas especiales (manuales) ─────────────
 
 /**
  * Recorre `dates` y genera notifs si:
  *  - hoy es 1 día antes de la fecha → "Mañana es X"
  *  - hoy es la fecha → "Hoy es X"
+ * Audience = null (les llega a los dos).
  */
 export function buildSpecialDateNotifications(
   dates: SpecialDate[],
@@ -76,7 +81,6 @@ export function buildSpecialDateNotifications(
 ): ScheduledNotification[] {
   const out: ScheduledNotification[] = []
   for (const sd of dates) {
-    // Las fechas se guardan a noon UTC; comparamos por día calendario local.
     const target = new Date(sd.date)
     const diff = differenceInCalendarDays(
       new Date(target.getFullYear(), target.getMonth(), target.getDate()),
@@ -107,3 +111,48 @@ export function buildSpecialDateNotifications(
   }
   return out
 }
+
+// ─── Milestones automáticos (100d, 6m, 1y, 500d, 18m, 2y, etc) ───
+
+/**
+ * Genera notifs si hoy coincide con un milestone automático del aniversario.
+ * Audience = null (les llega a los dos).
+ */
+export function buildAutoMilestoneNotifications(
+  startDate: Date,
+  today: Date,
+): ScheduledNotification[] {
+  const milestones = generateMilestones(startDate)
+  const out: ScheduledNotification[] = []
+  const todayKey = todayIso(today)
+  for (const ms of milestones) {
+    const diff = differenceInCalendarDays(
+      new Date(ms.date.getFullYear(), ms.date.getMonth(), ms.date.getDate()),
+      new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+    )
+    if (diff === 0) {
+      out.push({
+        audience: null,
+        payload: {
+          title: `${ms.emoji} ${ms.label}`,
+          body: 'Hoy se cumple. Festejen 💕',
+          url: '/',
+          tag: `milestone-${ms.label}-${todayKey}`,
+        },
+      })
+    } else if (diff === 1) {
+      out.push({
+        audience: null,
+        payload: {
+          title: `${ms.emoji} Mañana: ${ms.label}`,
+          body: 'No te lo pierdas ✨',
+          url: '/',
+          tag: `milestone-${ms.label}-d1-${todayKey}`,
+        },
+      })
+    }
+  }
+  return out
+}
+
+export const COUPLE_START = COUPLE_START_DATE

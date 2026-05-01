@@ -24,6 +24,13 @@ export interface SavedFile {
   type: GalleryMediaType
 }
 
+// Normaliza URLs viejas (`/galeria/foo.jpg`, escritas a public/ que en
+// `output: standalone` no se sirven en runtime) al endpoint actual.
+export function normalizeGalleryUrl(url: string, filename: string): string {
+  if (url.startsWith('/galeria/')) return `/api/galeria/file/${filename}`
+  return url
+}
+
 export function validateUpload(file: File): { ok: true } | { ok: false; error: string; status: number } {
   if (!file || typeof file.size !== 'number') {
     return { ok: false, error: 'Archivo inválido', status: 400 }
@@ -50,7 +57,7 @@ export async function saveFile(file: File): Promise<SavedFile> {
   const type: GalleryMediaType = (ALLOWED_VIDEO_MIMES as readonly string[]).includes(file.type)
     ? 'video'
     : 'photo'
-  return { filename, url: `/galeria/${filename}`, type }
+  return { filename, url: `/api/galeria/file/${filename}`, type }
 }
 
 export async function deleteFile(filename: string): Promise<void> {

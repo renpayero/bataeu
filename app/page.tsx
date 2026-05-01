@@ -7,6 +7,9 @@ import NosotrosBackground from '@/components/NosotrosBackground'
 import RelationshipCounter from '@/components/RelationshipCounter'
 import MilestoneTimeline from '@/components/MilestoneTimeline'
 import SpecialDateForm, { type SpecialDateData } from '@/components/SpecialDateForm'
+import ResetWelcomeButton from '@/components/ResetWelcomeButton'
+import WelcomeLetter from '@/components/WelcomeLetter'
+import { WELCOME_NOSOTROS } from '@/lib/welcomeLetters'
 import { COUPLE_START_DATE } from '@/lib/coupleConfig'
 
 const CinematicCounter = dynamic(() => import('@/components/CinematicCounter'), {
@@ -24,7 +27,7 @@ export default function NosotrosPage() {
     try {
       const res = await fetch('/api/dates')
       const data = await res.json()
-      setSpecialDates(data ?? [])
+      setSpecialDates(Array.isArray(data) ? data : [])
     } catch {
       setSpecialDates([])
     } finally {
@@ -69,6 +72,7 @@ export default function NosotrosPage() {
   return (
     <>
       <NosotrosBackground />
+      <WelcomeLetter content={WELCOME_NOSOTROS} />
 
       {showCinematic && (
         <CinematicCounter onClose={() => setShowCinematic(false)} />
@@ -139,6 +143,8 @@ export default function NosotrosPage() {
               />
             </motion.div>
           )}
+
+          <ResetWelcomeButton />
         </div>
       </div>
     </>

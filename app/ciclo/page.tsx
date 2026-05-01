@@ -10,6 +10,8 @@ import CycleForm from '@/components/CycleForm'
 import { getPhaseForDate } from '@/lib/cycleLogic'
 import type { Phase, PhaseInfo } from '@/lib/cycleLogic'
 import { phaseInfo } from '@/lib/phases'
+import WelcomeLetter from '@/components/WelcomeLetter'
+import { WELCOME_CICLO } from '@/lib/welcomeLetters'
 
 interface CycleEntry {
   id: number
@@ -103,6 +105,7 @@ export default function CicloPage() {
   return (
     <>
       <MeshBackground phase={activePhase} />
+      <WelcomeLetter content={WELCOME_CICLO} />
 
       <div className="min-h-screen">
         {/* Phase badge */}

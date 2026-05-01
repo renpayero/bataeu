@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { firePush } from '@/lib/push/triggers'
+import { COUPLE_NICKNAMES } from '@/lib/coupleConfig'
 
 const MAX_ANTOJOS = 4
 const TTL_MS = 24 * 60 * 60 * 1000 // 24 horas en ms
@@ -42,6 +44,13 @@ export async function POST(request: Request) {
         content: content.trim(),
         ...(emoji && typeof emoji === 'string' ? { emoji } : {}),
       },
+    })
+
+    firePush(COUPLE_NICKNAMES.name1, {
+      title: `${antojo.emoji} ${COUPLE_NICKNAMES.name2} se antojó algo`,
+      body: antojo.content,
+      url: '/antojos',
+      tag: `antojo-${antojo.id}`,
     })
 
     return NextResponse.json(antojo, { status: 201 })

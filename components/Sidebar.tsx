@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import PushToggle from './PushToggle'
 
@@ -34,12 +34,21 @@ function matchActive(pathname: string, href: string): boolean {
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
   const [open, setOpen] = useState(false)
 
   // Cierra el drawer al cambiar de ruta en mobile
   useEffect(() => {
     setOpen(false)
   }, [pathname])
+
+  // Prefetch agresivo de todas las rutas principales al montar.
+  // Mejora la fluidez en mobile (links del drawer no están en viewport
+  // hasta abrir el menú, así que el prefetch automático no se dispara).
+  useEffect(() => {
+    const all = [...MAIN_TABS, ...LECTURA_SUBTABS]
+    for (const tab of all) router.prefetch(tab.href)
+  }, [router])
 
   const inLectura = pathname === '/lectura' || pathname.startsWith('/lectura/')
   const activeMain = MAIN_TABS.find((t) => matchActive(pathname, t.href))?.href ?? null

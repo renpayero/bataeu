@@ -7,6 +7,8 @@ import PhotoCard from './PhotoCard'
 import PhotoLightbox from './PhotoLightbox'
 import CinematicFeedToggle from './CinematicFeedToggle'
 import { BataPhotographer } from '@/components/BataEu'
+import WelcomeLetter from '@/components/WelcomeLetter'
+import { WELCOME_GALERIA } from '@/lib/welcomeLetters'
 import type { GalleryPhotoData } from '@/lib/galleria/types'
 import type { SpecialDateLite } from '@/lib/galleria/milestoneOptions'
 
@@ -69,6 +71,7 @@ export default function GaleriaClient() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12">
+      <WelcomeLetter content={WELCOME_GALERIA} />
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

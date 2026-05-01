@@ -17,12 +17,12 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Hormonitas',
+  title: 'Bata Eu',
   description: 'Nuestra cápsula',
-  applicationName: 'Hormonitas',
+  applicationName: 'Bata Eu',
   appleWebApp: {
     capable: true,
-    title: 'Hormonitas',
+    title: 'Bata Eu',
     statusBarStyle: 'black-translucent',
   },
   formatDetection: {

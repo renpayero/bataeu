@@ -246,6 +246,29 @@ export default function ReadingTimer({
     }
   }, [phase, ring, reducedMotion])
 
+  // Notif local 5 min antes de terminar la sesión (solo si hay target).
+  // Se dispara una sola vez por arranque/reanudación; se cancela al pausar.
+  useEffect(() => {
+    if (phase !== 'running' || targetMs === null) return
+    const remainingMs = targetMs - displayMs - 5 * 60 * 1000
+    if (remainingMs <= 0) return
+    const t = setTimeout(() => {
+      if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return
+      navigator.serviceWorker.getRegistration().then((reg) => {
+        if (!reg) return
+        reg.showNotification('📖 5 minutos para cerrar el libro', {
+          body: book ? `Vas terminando "${book.title}". Última pasada y guardamos.` : 'Te quedan 5 minutos. Disfrutá los últimos párrafos.',
+          tag: `reading-5min-${Date.now()}`,
+          icon: '/icon-192',
+          badge: '/icon-192',
+        }).catch(() => {})
+      }).catch(() => {})
+    }, remainingMs)
+    return () => clearTimeout(t)
+    // displayMs cambia constantemente; usamos solo en el primer render del 'running'
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, targetMs, book])
+
   // Actualizar document.title mientras corre
   useEffect(() => {
     if (!open) return

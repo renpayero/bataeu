@@ -77,7 +77,8 @@ export async function unsubscribePush(): Promise<void> {
 export async function getCurrentSubscription(): Promise<PushSubscription | null> {
   if (!('serviceWorker' in navigator)) return null
   try {
-    const reg = await navigator.serviceWorker.ready
+    const reg = await navigator.serviceWorker.getRegistration()
+    if (!reg) return null
     return await reg.pushManager.getSubscription()
   } catch {
     return null

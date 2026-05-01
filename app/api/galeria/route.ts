@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { saveFile, validateUpload } from '@/lib/galleria/storage'
+import { saveFile, validateUpload, normalizeGalleryUrl } from '@/lib/galleria/storage'
+import { firePush } from '@/lib/push/triggers'
+import { COUPLE_NICKNAMES } from '@/lib/coupleConfig'
 
 export async function GET() {
   try {
@@ -8,7 +10,8 @@ export async function GET() {
       include: { specialDate: true },
       orderBy: [{ takenAt: 'desc' }, { createdAt: 'desc' }],
     })
-    return NextResponse.json(photos)
+    const normalized = photos.map((p) => ({ ...p, url: normalizeGalleryUrl(p.url, p.filename) }))
+    return NextResponse.json(normalized)
   } catch {
     return NextResponse.json({ error: 'Error al obtener la galería' }, { status: 500 })
   }
@@ -57,6 +60,13 @@ export async function POST(request: Request) {
         specialDateId,
       },
       include: { specialDate: true },
+    })
+
+    firePush(COUPLE_NICKNAMES.name1, {
+      title: `📸 ${COUPLE_NICKNAMES.name2} subió una foto`,
+      body: row.caption ?? 'Un nuevo recuerdo en el álbum',
+      url: '/galeria',
+      tag: `galeria-${row.id}`,
     })
 
     return NextResponse.json(row, { status: 201 })

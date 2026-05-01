@@ -3,8 +3,10 @@ import { prisma } from '@/lib/prisma'
 import {
   buildCycleNotification,
   buildSpecialDateNotifications,
+  buildAutoMilestoneNotifications,
   type ScheduledNotification,
 } from '@/lib/push/messages'
+import { COUPLE_START_DATE } from '@/lib/coupleConfig'
 import { getSubscriptionsFor, sendPushTo, type SendResult } from '@/lib/push/sender'
 
 export const dynamic = 'force-dynamic'
@@ -51,6 +53,7 @@ export async function POST(req: NextRequest) {
   const cycleNotif = buildCycleNotification(cycleEntry, today)
   if (cycleNotif) notifications.push(cycleNotif)
   notifications.push(...buildSpecialDateNotifications(specialDates, today))
+  notifications.push(...buildAutoMilestoneNotifications(COUPLE_START_DATE, today))
 
   // Despachar
   const summary: DispatchSummary[] = []
@@ -88,6 +91,7 @@ export async function GET(req: NextRequest) {
   const cycleNotif = buildCycleNotification(cycleEntry, today)
   if (cycleNotif) notifications.push(cycleNotif)
   notifications.push(...buildSpecialDateNotifications(specialDates, today))
+  notifications.push(...buildAutoMilestoneNotifications(COUPLE_START_DATE, today))
 
   const subsCount = await prisma.pushSubscription.count()
 

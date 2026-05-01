@@ -3,8 +3,8 @@ import type { MetadataRoute } from 'next'
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: '/',
-    name: 'Hormonitas',
-    short_name: 'Hormonitas',
+    name: 'Bata Eu',
+    short_name: 'Bata Eu',
     description: 'Nuestra cápsula',
     start_url: '/',
     display: 'standalone',
