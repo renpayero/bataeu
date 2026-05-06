@@ -22,6 +22,9 @@ services:
     container_name: hormonitas-app
     restart: unless-stopped
     env_file: .env
+    environment:
+      # Next.js standalone bind a todas las interfaces (default + nginx network)
+      HOSTNAME: 0.0.0.0
     ports:
       - "3000:3000"
     depends_on:
@@ -31,7 +34,16 @@ services:
       # Galería de fotos subidas por la novia — persiste fuera del contenedor
       # para no perderse al rebuilds. El path en host es ./uploads/galeria.
       - ./uploads/galeria:/app/public/galeria
+    networks:
+      - default
+      - nginx
 
 volumes:
   postgres_data:
     name: hormonitas_postgres_data
+
+networks:
+  default:
+  nginx:
+    name: nginx_default
+    external: true
