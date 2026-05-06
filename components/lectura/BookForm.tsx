@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import GoogleBooksSearch from './GoogleBooksSearch'
 import BookCover from './BookCover'
+import FinishBookModal from './FinishBookModal'
 import {
   BOOK_STATUS,
   BOOK_FORMATS,
@@ -47,6 +48,7 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
   const [searchOpen, setSearchOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [finishModalOpen, setFinishModalOpen] = useState(false)
 
   function handleGoogleSelect(r: GoogleBooksResult) {
     setTitle(r.title)
@@ -59,12 +61,7 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
     setGoogleBooksId(r.googleBooksId)
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!title.trim() || !author.trim()) return
-    setLoading(true)
-    setError(null)
-
+  function buildPayload(extra?: { rating?: number | null; reviewText?: string | null }): BookInput {
     const payload: BookInput = {
       title: title.trim(),
       author: author.trim(),
@@ -78,7 +75,17 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
       priority,
       googleBooksId,
     }
+    if (status === 'terminado' && !initial?.endDate) {
+      payload.endDate = new Date().toISOString()
+    }
+    if (extra && 'rating' in extra) payload.rating = extra.rating
+    if (extra && 'reviewText' in extra) payload.reviewText = extra.reviewText
+    return payload
+  }
 
+  async function persist(payload: BookInput) {
+    setLoading(true)
+    setError(null)
     try {
       const url = isEdit ? `/api/lectura/books/${bookId}` : '/api/lectura/books'
       const method = isEdit ? 'PUT' : 'POST'
@@ -98,6 +105,28 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
     } finally {
       setLoading(false)
     }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!title.trim() || !author.trim()) return
+
+    // Si el libro queda como "terminado" y no estaba antes, pedir rating + reseña.
+    const becomingFinished = status === 'terminado' && initial?.status !== 'terminado'
+    if (becomingFinished) {
+      setFinishModalOpen(true)
+      return
+    }
+
+    await persist(buildPayload())
+  }
+
+  async function handleFinishConfirm(data: {
+    rating: number | null
+    reviewText: string | null
+  }) {
+    setFinishModalOpen(false)
+    await persist(buildPayload(data))
   }
 
   return (
@@ -344,6 +373,15 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
           opacity: 0.6;
         }
       `}</style>
+
+      <FinishBookModal
+        open={finishModalOpen}
+        bookTitle={title || 'Tu libro'}
+        initialRating={initial?.rating ?? null}
+        initialReview={initial?.reviewText ?? null}
+        onClose={() => setFinishModalOpen(false)}
+        onConfirm={handleFinishConfirm}
+      />
     </>
   )
 }
