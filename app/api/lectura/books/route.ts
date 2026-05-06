@@ -51,6 +51,8 @@ export async function POST(request: Request) {
       startDate,
       moods,
       googleBooksId,
+      rating,
+      reviewText,
     } = body
 
     if (!title || typeof title !== 'string' || !title.trim()) {
@@ -94,6 +96,11 @@ export async function POST(request: Request) {
           ? moods.filter((m: unknown) => typeof m === 'string')
           : [],
         googleBooksId: googleBooksId || null,
+        rating: typeof rating === 'number' ? rating : null,
+        reviewText:
+          typeof reviewText === 'string' && reviewText.trim()
+            ? reviewText.trim().slice(0, 2000)
+            : null,
       },
       include: { series: true, quotes: true },
     })

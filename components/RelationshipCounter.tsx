@@ -4,7 +4,14 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { COUPLE_START_DATE, COUPLE_NAMES } from '@/lib/coupleConfig'
 
-function computeDiff(start: Date) {
+interface Diff {
+  days: number
+  hours: number
+  minutes: number
+  seconds: number
+}
+
+function computeDiff(start: Date): Diff {
   const diffMs = Date.now() - start.getTime()
   const days = Math.floor(diffMs / 86400000)
   const hours = Math.floor((diffMs % 86400000) / 3600000)
@@ -14,9 +21,13 @@ function computeDiff(start: Date) {
 }
 
 export default function RelationshipCounter() {
-  const [diff, setDiff] = useState(() => computeDiff(COUPLE_START_DATE))
+  // Inicializamos en null para evitar que el HTML cacheado (SSR/SW)
+  // muestre un valor viejo congelado en el DOM. Al montar, el useEffect
+  // dispara el primer cómputo real y fuerza un repaint distinto al SSR.
+  const [diff, setDiff] = useState<Diff | null>(null)
 
   useEffect(() => {
+    setDiff(computeDiff(COUPLE_START_DATE))
     const id = setInterval(() => setDiff(computeDiff(COUPLE_START_DATE)), 1000)
     return () => clearInterval(id)
   }, [])
@@ -59,7 +70,7 @@ export default function RelationshipCounter() {
           className="font-playfair text-7xl sm:text-8xl font-extrabold text-rose-600 leading-none"
           suppressHydrationWarning
         >
-          {diff.days}
+          {diff ? diff.days : '—'}
         </span>
         <p className="text-sm font-bold text-rose-400 mt-2 uppercase tracking-widest">
           días juntos
@@ -69,9 +80,9 @@ export default function RelationshipCounter() {
       {/* Sub counter: h / m / s */}
       <div className="flex items-center justify-center gap-4 mt-6">
         {[
-          { value: diff.hours, label: 'horas' },
-          { value: diff.minutes, label: 'min' },
-          { value: diff.seconds, label: 'seg' },
+          { value: diff?.hours ?? 0, label: 'horas' },
+          { value: diff?.minutes ?? 0, label: 'min' },
+          { value: diff?.seconds ?? 0, label: 'seg' },
         ].map((item) => (
           <div key={item.label} className="flex flex-col items-center">
             <span

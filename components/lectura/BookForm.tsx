@@ -40,7 +40,6 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
     (initial?.status as BookStatus) ?? 'quiero'
   )
   const [priority, setPriority] = useState<number>(initial?.priority ?? 3)
-  const [location, setLocation] = useState(initial?.location ?? '')
   const [googleBooksId, setGoogleBooksId] = useState<string | null>(
     initial?.googleBooksId ?? null
   )
@@ -77,7 +76,6 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
       format,
       status,
       priority,
-      location: location || null,
       googleBooksId,
     }
 
@@ -273,15 +271,6 @@ export default function BookForm({ bookId, initial, onSuccess, onCancel }: Props
               </motion.button>
             ))}
           </div>
-        </Field>
-
-        <Field label="Ubicación (físico)">
-          <input
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="reading-input"
-            placeholder="mesa de luz, estante del living…"
-          />
         </Field>
 
         <AnimatePresence>

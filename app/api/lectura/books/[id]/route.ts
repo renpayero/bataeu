@@ -83,6 +83,10 @@ export async function PUT(
     if ('endDate' in body) data.endDate = normalizeDate(body.endDate)
     if ('rating' in body)
       data.rating = typeof body.rating === 'number' ? body.rating : null
+    if ('reviewText' in body) {
+      const t = typeof body.reviewText === 'string' ? body.reviewText.trim() : ''
+      data.reviewText = t ? t.slice(0, 2000) : null
+    }
     if ('lentTo' in body) data.lentTo = body.lentTo || null
     if ('lentAt' in body) data.lentAt = normalizeDate(body.lentAt)
     if (Array.isArray(body.moods))

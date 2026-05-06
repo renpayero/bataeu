@@ -9,6 +9,7 @@ import BookForm from './BookForm'
 import QuoteForm from './QuoteForm'
 import QuoteCard from './QuoteCard'
 import TimerLauncher from './TimerLauncher'
+import FinishBookModal from './FinishBookModal'
 import { BOOK_STATUS, BOOK_FORMATS } from '@/lib/lectura/readingPalette'
 import { MILESTONE_MESSAGES, BUTTON_LABELS } from '@/lib/lectura/readingConfig'
 import type { BookData, QuoteData } from '@/lib/lectura/types'
@@ -45,6 +46,7 @@ export default function BookDetail({ bookId }: Props) {
     Array<{ id: number; emoji: string; vx: number; vy: number }>
   >([])
   const [milestone, setMilestone] = useState<string | null>(null)
+  const [finishModalOpen, setFinishModalOpen] = useState(false)
 
   useEffect(() => {
     let alive = true
@@ -78,7 +80,10 @@ export default function BookDetail({ bookId }: Props) {
     setTimeout(() => setConfetti([]), 2000)
   }
 
-  async function updateStatus(newStatus: string) {
+  async function updateStatus(
+    newStatus: string,
+    extra?: { rating?: number | null; reviewText?: string | null },
+  ) {
     if (!book) return
     const wasNotFinished = book.status !== 'terminado'
     const goingToFinished = newStatus === 'terminado'
@@ -95,6 +100,8 @@ export default function BookDetail({ bookId }: Props) {
     if (goingToFinished) payload.endDate = new Date().toISOString()
     if (newStatus === 'leyendo' && !book.startDate)
       payload.startDate = new Date().toISOString()
+    if (extra && 'rating' in extra) payload.rating = extra.rating
+    if (extra && 'reviewText' in extra) payload.reviewText = extra.reviewText
 
     const res = await fetch(`/api/lectura/books/${book.id}`, {
       method: 'PUT',
@@ -105,6 +112,14 @@ export default function BookDetail({ bookId }: Props) {
       const updated: BookData = await res.json()
       setBook(updated)
     }
+  }
+
+  async function handleFinishConfirm(data: {
+    rating: number | null
+    reviewText: string | null
+  }) {
+    setFinishModalOpen(false)
+    await updateStatus('terminado', data)
   }
 
   async function handleDelete() {
@@ -285,6 +300,39 @@ export default function BookDetail({ bookId }: Props) {
             </p>
           )}
 
+          {/* Rating + reseña (solo en libros terminados) */}
+          {book.status === 'terminado' && (book.rating || book.reviewText) && (
+            <div
+              className="mt-6 rounded-2xl p-5 reading-paper-bg"
+              style={{ border: '1px solid var(--reading-border)' }}
+            >
+              {book.rating ? (
+                <div className="flex items-center gap-1 mb-3" aria-label={`${book.rating} de 5 estrellas`}>
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <span
+                      key={n}
+                      className="text-xl"
+                      style={{
+                        color: n <= (book.rating ?? 0) ? '#f59e0b' : '#d1d5db',
+                        filter: n <= (book.rating ?? 0) ? 'drop-shadow(0 1px 2px rgba(245,158,11,0.4))' : 'none',
+                      }}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+              {book.reviewText && (
+                <blockquote
+                  className="reading-ink-text italic leading-relaxed whitespace-pre-line"
+                  style={{ fontFamily: 'var(--font-playfair), serif' }}
+                >
+                  {book.reviewText}
+                </blockquote>
+              )}
+            </div>
+          )}
+
           {/* Acciones */}
           <div className="mt-6 flex flex-wrap gap-2">
             {(book.status === 'leyendo' || book.status === 'pausado') && (
@@ -299,7 +347,7 @@ export default function BookDetail({ bookId }: Props) {
             )}
             {book.status !== 'terminado' && (
               <ActionButton
-                onClick={() => updateStatus('terminado')}
+                onClick={() => setFinishModalOpen(true)}
                 label={BUTTON_LABELS.markFinished}
                 icon="✓"
               />
@@ -397,6 +445,15 @@ export default function BookDetail({ bookId }: Props) {
           </ModalShell>
         )}
       </AnimatePresence>
+
+      <FinishBookModal
+        open={finishModalOpen}
+        bookTitle={book.title}
+        initialRating={book.rating}
+        initialReview={book.reviewText}
+        onClose={() => setFinishModalOpen(false)}
+        onConfirm={handleFinishConfirm}
+      />
     </div>
   )
 }

@@ -101,6 +101,7 @@ model Book {
   startDate      DateTime?
   endDate        DateTime?
   rating         Int?
+  reviewText     String?
   lentTo         String?
   lentAt         DateTime?
   moods          String[]  @default([])

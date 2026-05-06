@@ -18,6 +18,7 @@ export interface BookData {
   startDate: string | null
   endDate: string | null
   rating: number | null
+  reviewText: string | null
   lentTo: string | null
   lentAt: string | null
   moods: string[]
@@ -60,8 +61,11 @@ export interface BookInput {
   seriesName?: string | null
   seriesOrder?: number | null
   startDate?: string | null
+  endDate?: string | null
   moods?: string[]
   googleBooksId?: string | null
+  rating?: number | null
+  reviewText?: string | null
 }
 
 export type PomodoroType = '25-5' | '45-15' | 'libre' | 'custom'
